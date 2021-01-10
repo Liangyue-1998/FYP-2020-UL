@@ -1,0 +1,20 @@
+{% extends "doodle/base.html" %}
+
+
+{% block head_title %}Sign Out{% endblock %}
+
+{% block container %}
+<h1 class="mt-5">Sign Out</h1>
+
+<p class="mb-5">Are you sure you want to sign out?</p>
+
+<form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit" class="btn btn-primary">Sign Out</button>
+</form>
+
+
+{% endblock %}

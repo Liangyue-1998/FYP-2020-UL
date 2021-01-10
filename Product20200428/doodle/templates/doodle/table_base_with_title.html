@@ -1,0 +1,27 @@
+<div style="text-align: center;font-size: 40px;font-style: oblique" class="mt-5">
+  <h5 style="font-size: 40px;font-style: oblique">Table</h5>
+</div>
+
+<table class="delete-line-table table mb-5 text-center" id="{{ table_id }}" style="margin-bottom: 100px;">
+  <thead>
+  <tr>
+    <th scope="col"></th>
+    {% for i in costs.0 %}
+      <th scope="col">Assignee {{ forloop.counter }}</th>
+    {% endfor %}
+  </tr>
+  </thead>
+  <tbody>
+  {% for nl in costs %}
+    <tr>
+      <th scope="row">Assigned {{ forloop.counter }}</th>
+      {% for n in nl %}
+        <td id="{{ table_id }}-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" class="">
+              <div class="vertical-div"><div class="" style="padding: 0">{{ n }}</div></div>
+        </td>
+
+      {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

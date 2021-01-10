@@ -1,0 +1,35 @@
+{% extends 'doodle/base.html' %}
+
+{% block container %}
+  <div class="row" style="margin-top: 50px">
+    <div class="col-3 mr-5" style="margin-top: 100px">
+      <div style="margin-bottom: 30px">
+        <a href="/" class="btn btn-primary btn-lg btn-block">Collection</a>
+      </div>
+      <div style="margin-bottom: 30px">
+        <a href="/bin/" class="btn btn-primary btn-lg btn-block">Bin</a>
+      </div>
+      <div style="margin-bottom: 30px">
+        <a class="btn btn-primary btn-lg btn-block" href="{% url 'page2' %}">Create</a>
+      </div>
+    </div>
+    <div class="col-8">
+      <h1 class="text-center">File management</h1>
+    <hr>
+
+      {% if user.is_authenticated %}
+        <ul class="list-group list-group-flush">
+        {% for proj in projs %}
+          <li class="list-group-item">
+            <a href="{% url 'project_detail' proj.id %}">{{ proj.title }}</a>
+{#           <a class="btn btn-outline-danger btn-sm" href="{% url 'project_delete' proj.id %}">delete</a>#}
+          </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+          <p>Please login</p>
+        {% endif %}
+      </div>
+    </div>
+
+{% endblock %}

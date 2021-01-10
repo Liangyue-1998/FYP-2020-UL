@@ -1,0 +1,8 @@
+Thank you for your interest in this assignment problem website.
+
+Some functions of the website
+1. The home page is used for file management, you can review and edit the previous assignment problems.
+2. solve the practical problem for applications of the assignment problem.
+3. Showing the optimal solution and optimal result.
+4. Showing the working and steps of the Hungarian Method.
+5. Showing the principle and theory of the Hungarian Method.

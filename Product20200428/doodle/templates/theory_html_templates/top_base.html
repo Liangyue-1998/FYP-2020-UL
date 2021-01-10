@@ -1,0 +1,36 @@
+{% load static %}
+<div class="theory-top" style="font-size: 25px;">
+
+  <h2>The Mathematical Model of the Assignment Problem</h2>
+  <p>Objective function:</p>
+  <p class="text-center" style="font-size: 30px">
+    Z = <img src="{% static 'Theory_files/image002.png' %}">
+  </p>
+
+  <p> Subject to: </p>
+
+  <div class="text-center">
+    <img src="{% static 'Theory_files/image004.png' %}" style="width: 300px">
+    <br>
+    <img src="{% static 'Theory_files/image006.png' %}" style="width: 300px">
+  </div>
+
+
+  <img src="{% static 'Theory_files/image008.png' %}" style="width: 700px; margin-bottom: 30px;">
+
+  <p style="color: #C00202">
+{#    Theorem 1.1 If each row or column of <img src="{% static 'Theory_files/image010.png' %}"> adds (or minus) a constant to form a new matrix <img src="{% static 'Theory_files/image012.png' %}">. The element ‘0’ that located in different rows and columns in the coefficient matrix <img src="{% static 'Theory_files/image012.png' %}">  complete correspond with elements ‘1’ in matrix <img src="{% static 'Theory_files/image014.png' %}">.#}
+    Theorem 1.1 If we can find elements ‘0’ that located in different rows and columns in the transferred coefficient matrix, and the number of independent ‘0’ are equal to the number of rows. The position of these independent ‘0’ completely corresponds with elements ‘1’ in matrix <img src="{% static 'Principle_files/nimage022.png' %}">. Those independent ‘0’ combine into the optimal solution.
+  </p>
+
+
+  <h3 class="mt-5">The Equivalence of Modified Matrix</h3>
+
+  <p style="color: #C00202">
+    Theorem 2.1 If each row or column of <img src="{% static 'Theory_files/image010.png' %}"> adds (or minus) a constant <img src="{% static 'Theory_files/image016.png' %}">  (or <img src="{% static 'Theory_files/image018.png' %}">) to form a new matrix <img src="{% static 'Theory_files/image012.png' %}">, the optimal solution of <img src="{% static 'Theory_files/image010.png' %}"> and <img src="{% static 'Theory_files/image012.png' %}"> are equivalent.
+  </p>
+
+  <div class="text-center">
+    <img src="{% static 'Theory_files/image020.png' %}">
+  </div>
+</div>

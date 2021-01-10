@@ -1,0 +1,13 @@
+{% extends 'doodle/base.html' %}
+
+{% block container %}
+  <form method="post" action="{% url 'project_rename' project.pk %}" class="mt-5">
+  {% csrf_token %}
+  <div class="form-group">
+    <p>Old name: {{ project.title }}</p>
+    <label for="title">New name: </label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="" style="width: 300px;" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

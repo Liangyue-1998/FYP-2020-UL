@@ -1,0 +1,84 @@
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.container {
+  max-width: 960px;
+  margin-top: 120px;
+}
+
+.pricing-header {
+  max-width: 700px;
+}
+
+.card-deck .card {
+  min-width: 220px;
+}
+
+
+.job-lines {
+  border-right-width: 2px;
+  border-right: yellow;
+}
+
+.theory {
+  font-style: italic;
+  width: 700px;
+  font-size: 25px;
+  margin-left: auto;
+  margin-right: auto;
+    /*background-color: #FBE251;*/
+}
+
+.theory-inline-symbol {
+    /*width: 25px;*/
+}
+
+.theory-inline-formula {
+    /*width: 350px;*/
+}
+
+/*delete table*/
+.vertical-delete-line:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 1%;
+  bottom: -6%;
+  left: 50%;
+  border-left: 1px solid #ff0000;
+  transform: translate(-50%);
+}
+
+.horizon-delete-line:after {
+  position: absolute;
+  left: -25%;
+  top: 50%;
+  height: 1px;
+  background: #ff0000;
+  content: "";
+  width: 167%;
+  display: block;
+}
+
+.vertical-div {
+  margin: -2px auto;
+  width: 60%;
+  height: 100%;
+  /* border: 1px solid #333; */
+  position: relative;
+  text-align: center
+}
+
+.delete-line-table td {
+  padding: 0 0 0 0;
+}
+.delete-line-table td div {
+  padding: 15px;
+}
+/*delete table*/

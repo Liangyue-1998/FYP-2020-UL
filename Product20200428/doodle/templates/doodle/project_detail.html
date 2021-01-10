@@ -1,0 +1,76 @@
+{% extends 'doodle/base.html' %}
+
+{% block container %}
+  <h1 class="text-center">Project title: {{ project.title }}</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      {% for i in job_range %}
+        <th scope="col">Assignee {{ i|add:1 }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+
+
+    {% for nl in costs %}
+      <tr>
+        <th scope="row">Assigned {{ forloop.counter }}</th>
+        {% for n in nl %}
+          <td id="{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{{ n }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+
+
+  <div class="row">
+    <div class="col-sm">
+      <a href="{% url 'project_parse' project.id 'maximum' %}" class="btn btn-primary btn-lg btn-block">maximum result</a>
+    </div>
+    <div class="col-sm">
+      <a href="{% url 'project_parse' project.id 'minimum' %}" class="btn btn-primary btn-lg btn-block">minimum result</a>
+    </div>
+    <div class="col-sm">
+      <a href="{% url 'project_edit' project.id %}" class="btn btn-primary btn-lg btn-block">edit</a>
+    </div>
+  </div>
+
+
+  <p id="matched-data" hidden>{{ matched }}</p>
+
+{% endblock %}
+
+{% block script %}
+  <script>
+      var element = document.getElementById("matched-data");
+      var dt = element.textContent.replace(/[ [(\]]/g, '');
+      var dtr = dt.split(')');
+      console.log(dtr);
+
+      var result = [];
+      dtr.forEach(function (ele) {
+          if (ele !== "") {
+              var tmp = [];
+              var tmp_array = ele.split(',');
+
+              tmp_array.forEach(function (elee) {
+                  if (elee !== "") {
+                      tmp.push(parseInt(elee))
+                  }
+              });
+              result.push(tmp);
+              // tmp 就是需要高亮的元素
+              var tdId = tmp.join('-');
+              document.getElementById(tdId).classList.add('bg-info');
+          }
+      });
+      console.log(result)
+
+      // 设置高亮
+
+  </script>
+{% endblock %}

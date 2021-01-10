@@ -1,0 +1,65 @@
+{% extends 'doodle/base.html' %}
+
+{% block container %}
+  <h1 class="text-center">Project title: {{ project.title }}</h1>
+
+  {% include 'doodle/table_base.html' with costs=origin_costs table_id='tt' %}
+
+  <h2>The {{ method }} result is {{ result }}</h2>
+
+
+  <div class="row">
+    <div class="col-sm">
+      <a class="btn btn-primary btn-lg btn-block" href="{% url 'project_detail' project.id %}">back</a>
+    </div>
+    <div class="col-sm">
+      <form method="post" action="/save/">
+        {% csrf_token %}
+        <input type="text" value="{{ project.id }}" name="pid" hidden>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">save</button>
+      </form>
+    </div>
+    <div class="col-sm">
+      <a href="{% url 'project_showworking' project.id method %}" class="btn btn-primary btn-lg btn-block">show working</a>
+    </div>
+  </div>
+
+
+  <p id="matched-data" hidden>{{ matched }}</p>
+
+{% endblock %}
+
+{% block script %}
+  <script>
+      var element = document.getElementById("matched-data");
+      var dt = element.textContent.replace(/[ [(\]]/g, '');
+      var dtr = dt.split(')');
+      console.log(dtr);
+
+      var result = [];
+      dtr.forEach(function (ele) {
+          if (ele !== "") {
+              var tmp = [];
+              var tmp_array = ele.split(',');
+
+              tmp_array.forEach(function (elee) {
+                  if (elee !== "") {
+                      tmp.push(parseInt(elee))
+                  }
+              });
+              result.push(tmp);
+              // tmp 就是需要高亮的元素
+              var tdId = tmp.join('-');
+              var ntdId = 'tt-'.concat(tdId)
+              var ele = document.getElementById(ntdId);
+              if (ele) {
+                  ele.classList.add('bg-info');
+              }
+          }
+      });
+      console.log(result)
+
+      // 设置高亮
+
+  </script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'doodle/base.html' %}
+
+{% block container %}
+  <h1 class="text-center">Project title: {{ proj.title }}</h1>
+
+
+  <form method="post" action="/parse/" id="form_area">
+  {% csrf_token %}
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      {% for i in job_range %}
+        <th scope="col">Assignee {{ i|add:1 }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for w in worker_range %}
+      <tr>
+        <th scope="row">Assigned {{ w|add:1 }}</th>
+        {% for j in job_range %}
+{#          <td><input type="text" name="worker-{{ w }}-job-{{ j }}" required></td>#}
+          <td><input type="text" name="worker-{{ w }}-job-{{ j }}" pattern="(\d+|null)" oninvalid="this.setCustomValidity('Must be numbers or null')"
+    oninput="setCustomValidity('')" required /></td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <input type="text" name="pid" value="{{ proj.id }}" hidden>
+  <div class="row">
+    <div class="col-sm">
+      <button type="submit" class="btn btn-primary btn-lg btn-block" value="maximum" name="maximum">maximum result</button>
+    </div>
+    <div class="col-sm">
+      <button type="submit" class="btn btn-primary btn-lg btn-block" value="minimum" name="minimum">minimum result</button>
+    </div>
+  </div>
+
+  </form>
+
+{% endblock %}
+
+{% block script %}
+  <script>
+      console.log('wft');
+      $().validator({
+    custom: {
+        'odd': function($el) { return Boolean($el.val() % 2);}
+    }
+})
+
+  </script>
+{% endblock %}

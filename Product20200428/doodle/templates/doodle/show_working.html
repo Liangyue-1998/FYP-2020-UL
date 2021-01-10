@@ -1,0 +1,285 @@
+{% extends 'doodle/base.html' %}
+{% load static %}
+{% load multiply %}
+
+{% block head_script %}
+
+{% endblock %}
+
+{% block head_title %}
+  Show Working
+{% endblock %}
+
+{% block container %}
+
+  <h1 class="mb-3">Project title: {{ project.title }}</h1>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      {% for i in job_range %}
+        <th scope="col">Assignee {{ i|add:1 }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for nl in origin_costs %}
+      <tr>
+        <th scope="row">Assigned {{ forloop.counter }}</th>
+        {% for n in nl %}
+          <td id="{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{{ n }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+
+
+  <p id="matched-data" hidden>{{ matched }}</p>
+
+  <button id="theoryid" class="btn btn-primary" onclick="toggleTheory()">Show Theory</button>
+  <button id="detailid" class="btn btn-primary" onclick="toggleDetail()">Show Detail</button>
+
+  <div class="detail-page" style="margin-top: 50px;margin-bottom: 30px;">
+    {% if is_detail %}
+      {#    <hr>#}
+      <h5>The assignment problem is one of the fundamental combinatorial optimization problems in the branch of optimization and is based on mathematics. It deals with the distribution of resources to activities in a one-to-one way.</h5>
+      <h5>The Assignment problem is a special type of linear programming problem, aiming at finding the optimal solution and minimization or maximization of total cost or total efficiency for a complex assignment problem.</h5>
+      <h5>The assignment problem can be shown as the following types.</h5>
+      {% include 'doodle/table_base_with_title.html' with job_range=job_range costs=origin_costs %}
+
+      <div class="matrix" style="margin-top: 100px;">
+        <p style="font-size: 33px;">
+          \begin{equation*}
+          \begin{array}{ccc}
+          {# & & \textit{Matrix}\\#}
+          \textit{Matrix}\\
+          {# & & \begin{array}{ccc} 188 & \quad 2 \quad & 3 \end{array}\\#}
+          {#\textit{current state} & \begin{array}{c} 1\\ 2\\ 3\end{array} &#}
+          \left
+          (\begin{array}{ccc}
+          {% for nl in origin_costs %}
+            {% for n in nl %}
+              {% if forloop.counter == nl|length %}
+                {{ n }}
+              {% else %}
+                {{ n }}&
+              {% endif %}
+            {% endfor %}\\
+          {% endfor %}
+{#              1/2 & 0 & 1/2\\#}
+{#              0 & 1/2 & 1/2\\#}
+{#              1/4 & 1/4 & 1/2#}
+          \end{array}
+          \right)
+          \end{array}
+          \end{equation*}
+          {#\end{document}#}
+        </p>
+      </div>
+
+
+      <h6 style="text-align: center;margin-top: 100px;font-size: 40px;font-style: oblique">Bipartite Graph</h6>
+      <div class="bipartite" style="text-align: center">
+
+        <svg version="1.1"
+             baseProfile="full"
+             width="{{ bipartite.width }}" height="{{ bipartite.height }}"
+             xmlns="http://www.w3.org/2000/svg">
+
+          {#        <rect width="100%" height="100%" fill="red" />#}
+
+          {% for foo in worker_range %}
+            <circle cx="{{ bipartite.circle_r|add:bipartite.assign_text_width }}" cy="{{ forloop.counter0|multiply:bipartite.circle_height|add:bipartite.circle_r }}" r="{{ bipartite.circle_r }}" fill="#DAE3F3" />
+            <text x="0" y="{{ forloop.counter0|multiply:bipartite.circle_height|add:bipartite.circle_r|add:5 }}" font-size="16" fill="black">Assigned {{ forloop.counter }}</text>
+          {% endfor %}
+
+
+          {% for foo in job_range %}
+            <circle cx="{{ bipartite.circle_r|add:bipartite.column_space }}" cy="{{ forloop.counter0|multiply:bipartite.circle_height|add:bipartite.circle_r }}" r="{{ bipartite.circle_r }}" fill="#DAE3F3" />
+            <text x="{{ bipartite.circle_r|multiply:2|add:bipartite.column_space }}" y="{{ forloop.counter0|multiply:bipartite.circle_height|add:bipartite.circle_r|add:5 }}" font-size="16" fill="black">Assignee {{ forloop.counter }}</text>
+          {% endfor %}
+          {#        <text x="150" y="125" font-size="60" text-anchor="middle" fill="white">SVG</text>#}
+
+          {% for x1,y1,x2,y2,n,x3,y3 in bipartite.lines %}
+            <line x1="{{ x1 }}" x2="{{ x2 }}" y1="{{ y1 }}" y2="{{ y2 }}" fill="black" stroke="#000"/>
+            <text x="{{ x3 }}" y="{{ y3 }}" font-size="16" fill="black">{{ n }}</text>
+          {% endfor %}
+
+          {#        <line x1="10" x2="50" y1="110" y2="150"/>#}
+        </svg>
+
+      </div>
+
+      {#    <hr>#}
+    {% endif %}
+
+
+  </div>
+
+  <div class="showworking mt-5">
+
+    <h1 class="mb-5">Show working: {{ method }}</h1>
+    {% if is_theory %}
+      {% include 'theory_html_templates/top_base.html' %}
+    {% endif %}
+
+    <div>
+      <h5 class="mt-5">Origin costs: </h5>
+
+      {% include 'doodle/table_base.html' with job_range=job_range costs=origin_costs %}
+
+    </div>
+    {% for step, data, theory_html in steps %}
+      <div class="mt-5">
+        {% if step %}
+          <h6>{{ step|linebreaksbr }}</h6>
+        {% endif %}
+
+        {% if data %}
+          {% include 'doodle/table_base.html' with job_range=job_range costs=data table_id=forloop.counter %}
+        {% endif %}
+
+        {% if is_theory %}
+          {% if theory_html %}
+            {% include theory_html %}
+          {% endif %}
+        {% endif %}
+
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
+
+{% block script %}
+
+  <script>
+      function addWorkerElesClass(eles, name) {
+          eles.forEach(function (ele) {
+              var e = document.getElementById(ele);
+              if (e) {
+                  var childs = e.children;
+                  if (childs) {
+                      childs[0].firstChild.classList.add(name)
+                  }
+              }
+          });
+      }
+
+      function addElesClass(eles, name) {
+          eles.forEach(function (ele) {
+              var e = document.getElementById(ele);
+              if (e) {
+                  var childs = e.children;
+                  if (childs) {
+                      childs[0].classList.add("vertical-delete-line")
+                  }
+              }
+          });
+      }
+
+
+      function addElesStyle(eles, style) {
+          eles.forEach(function (ele) {
+              console.log('wft', ele)
+              var e = document.getElementById(ele);
+              if (e) {
+                  e.style.cssText = style;
+              }
+          });
+      }
+
+      // draw lines 划线
+      // job lines
+      var job_eles = {{ job_eles|safe }};
+      addElesClass(job_eles, "here")
+
+      //worker lines
+      var worker_eles = {{ worker_eles|safe }};
+      addWorkerElesClass(worker_eles, "horizon-delete-line")
+
+
+      // 最后 table 的高亮
+      var lasts = {{ lasts|safe }};
+      lasts.forEach(function (ele) {
+          let la_e = document.getElementById(ele);
+          if (la_e) {
+              la_e.classList.add('bg-info');
+          }
+      });
+
+      // 处理 update_value_positions_with_table
+      var high_eles = {{ update_value_positions_with_table|safe }};
+      var high_style = "border-style: solid; border-color: red; border-top-width: medium;";
+      addElesStyle(high_eles, high_style)
+
+  </script>
+
+  <script>
+      // click theory
+      if (location.href.includes('theory')) {
+          document.getElementById('theoryid').innerHTML = "Hide Theory";
+      } else {
+          document.getElementById('theoryid').innerHTML = "Show Theory";
+      }
+      function toggleTheory() {
+          if (location.href.includes('theory')) {
+              window.location.search = '';
+          } else {
+              window.location.search = '?theory=1';
+          }
+      }
+
+      // click detail
+      if (location.href.includes('detail')) {
+          document.getElementById('detailid').innerHTML = "Hide Detail";
+      } else {
+          document.getElementById('detailid').innerHTML = "Show Detail";
+      }
+      function toggleDetail() {
+          if (location.href.includes('detail')) {
+              window.location.search = '';
+          } else {
+              window.location.search = '?detail=1';
+          }
+      }
+
+  </script>
+  <script>
+      var element = document.getElementById("matched-data");
+      var dt = element.textContent.replace(/[ [(\]]/g, '');
+      var dtr = dt.split(')');
+      {#console.log(dtr);#}
+
+      var result = [];
+      dtr.forEach(function (ele) {
+          if (ele !== "") {
+              var tmp = [];
+              var tmp_array = ele.split(',');
+
+              tmp_array.forEach(function (elee) {
+                  if (elee !== "") {
+                      tmp.push(parseInt(elee))
+                  }
+              });
+              result.push(tmp);
+              // tmp 就是需要高亮的元素
+              var tdId = tmp.join('-');
+              var eletd = document.getElementById(tdId);
+              if (eletd) {
+                  eletd.classList.add('bg-info');
+              }
+          }
+      });
+      {#console.log(result)#}
+
+      // 设置高亮
+
+      // 公式库
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </script>
+{% endblock %}
